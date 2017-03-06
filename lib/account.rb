@@ -1,3 +1,5 @@
+require_relative 'InsufficientFundsError'
+
 module Bank
   class Account
     attr_reader :id, :balance
@@ -13,13 +15,11 @@ module Bank
     def withdraw(amount)
       if amount < 0
         raise ArgumentError.new("Cannot withdraw a negative amount (got #{amount})")
+        # return @balance
       end
+      raise InsufficientFundsError.new("Cannot overdraw account (got #{amount})") if @balance - amount < 0
 
-      if @balance - amount < 0
-        puts "Cannot withdraw; balance would go negative"
-        return @balance
-      end
-
+      # raise InsufficientFundsError.new("Cannot withdraw; balance would go negative") if @balance - amount < 0
       @balance -= amount
     end
 
